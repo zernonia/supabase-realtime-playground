@@ -136,8 +136,8 @@ export default defineComponent({
     })
 
     const deleteName = async () => {
-      const apiurl = import.meta.env.SUPABASE_URL as string
-      const apikey = import.meta.env.SUPABASE_KEY as string
+      const apiurl = import.meta.env.VITE_SUPABASE_URL as string
+      const apikey = import.meta.env.VITE_SUPABASE_KEY as string
       fetch(`${apiurl}/rest/v1/realtime?name=in.%28${sessionId}%29`, {
         method: "DELETE",
         body: JSON.stringify({
