@@ -45,6 +45,7 @@
     />
     <UserList
       class="fixed bottom-6 right-6 flex flex-col items-end"
+      :offset="isMobile ? 0 : 1"
       :users="currentUser"
     />
     <Cursor
@@ -196,6 +197,7 @@ export default defineComponent({
       currentUser,
       width,
       height,
+      isMobile,
     }
   },
 })

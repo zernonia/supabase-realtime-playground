@@ -11,7 +11,7 @@
         focus:outline-none
       "
     >
-      {{ users?.length ? users?.length + 1 : 1 }}
+      {{ users?.length ? users?.length + offset : offset }}
       {{ users?.length ? "PC users" : "PC user" }}
       <span class="block relative h-3 w-3 flex ml-4">
         <span
@@ -65,6 +65,10 @@ import { User } from "../interface"
 export default defineComponent({
   props: {
     users: Object as PropType<User[]>,
+    offset: {
+      type: Number,
+      default: 1,
+    },
   },
   setup() {
     return {}
