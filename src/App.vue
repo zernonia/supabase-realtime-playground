@@ -43,7 +43,10 @@
     <GithubButton
       class="fixed top-6 right-6 w-8 h-8 opacity-50 hover:opacity-100"
     />
-    <UserList class="fixed bottom-6 right-6" :users="currentUser" />
+    <UserList
+      class="fixed bottom-6 right-6 flex flex-col items-end"
+      :users="currentUser"
+    />
     <Cursor
       v-for="cursor in currentUser"
       :key="cursor.name"
@@ -150,18 +153,19 @@ export default defineComponent({
       prev.value = Date.now()
       const { data } = await supabase.from<User>("realtime").select("*")
       currentUser.value = data ? data : []
-      await upsertData()
       if (!isMobile.value) {
+        await upsertData()
         window.addEventListener("beforeunload", deleteName)
       } else {
         // because 'beforeunload' isn't fired on mobile, so using document.visibilityState instead.
-        document.addEventListener("visibilitychange", function () {
-          if (document.visibilityState == "hidden") {
-            deleteName()
-          } else if (document.visibilityState == "visible") {
-            upsertData()
-          }
-        })
+        // idk why this doesn't work, somebody sent HELP!
+        // document.addEventListener("visibilitychange", function () {
+        //   if (document.visibilityState == "hidden") {
+        //     deleteName()
+        //   } else if (document.visibilityState == "visible") {
+        //     upsertData()
+        //   }
+        // })
       }
     })
 
