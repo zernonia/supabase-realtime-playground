@@ -54,13 +54,26 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch, onMounted } from "vue"
+import {
+  defineComponent,
+  computed,
+  ref,
+  watch,
+  onMounted,
+  onBeforeUnmount,
+} from "vue"
 import Cursor from "./components/Cursor.vue"
 import UserList from "./components/UserList.vue"
 import PlayButton from "./components/PlayButton.vue"
 import GithubButton from "./components/GithubButton.vue"
 import { supabase } from "./supabase"
-import { useMouse, useNow, useWindowSize, useIdle } from "@vueuse/core"
+import {
+  useMouse,
+  useNow,
+  useWindowSize,
+  useIdle,
+  useDocumentVisibility,
+} from "@vueuse/core"
 import { uniqueNamesGenerator, adjectives, names } from "unique-names-generator"
 import { User } from "./interface"
 
@@ -80,6 +93,7 @@ export default defineComponent({
     const now = useNow()
     const { x, y } = useMouse()
     const { width, height } = useWindowSize()
+    const visibility = useDocumentVisibility()
     const { idle } = useIdle(500, { events: ["mousemove"] })
 
     const isMobile = computed(() => {
@@ -93,7 +107,6 @@ export default defineComponent({
         return false
       }
     })
-    console.log(isMobile)
 
     const sessionId = uniqueNamesGenerator({
       dictionaries: [adjectives, names],
@@ -145,9 +158,20 @@ export default defineComponent({
       const { data } = await supabase.from<User>("realtime").select("*")
       currentUser.value = data ? data : []
       await upsertData()
-      window.addEventListener("beforeunload", deleteName)
-      // if (!isMobile.value) {
-      // }
+      if (!isMobile.value) {
+        window.addEventListener("beforeunload", deleteName)
+      }
+    })
+
+    // because 'beforeunload' isn't fired on mobile, so using document.visibilityState instead.
+    watch(visibility, () => {
+      if (isMobile.value) {
+        if (visibility.value == "visible") {
+          upsertData()
+        } else if (visibility.value == "hidden") {
+          deleteName()
+        }
+      }
     })
 
     const deleteName = async () => {
