@@ -67,13 +67,7 @@ import UserList from "./components/UserList.vue"
 import PlayButton from "./components/PlayButton.vue"
 import GithubButton from "./components/GithubButton.vue"
 import { supabase } from "./supabase"
-import {
-  useMouse,
-  useNow,
-  useWindowSize,
-  useIdle,
-  useDocumentVisibility,
-} from "@vueuse/core"
+import { useMouse, useNow, useWindowSize, useIdle } from "@vueuse/core"
 import { uniqueNamesGenerator, adjectives, names } from "unique-names-generator"
 import { User } from "./interface"
 
@@ -93,7 +87,6 @@ export default defineComponent({
     const now = useNow()
     const { x, y } = useMouse()
     const { width, height } = useWindowSize()
-    const visibility = useDocumentVisibility()
     const { idle } = useIdle(500, { events: ["mousemove"] })
 
     const isMobile = computed(() => {
@@ -160,17 +153,15 @@ export default defineComponent({
       await upsertData()
       if (!isMobile.value) {
         window.addEventListener("beforeunload", deleteName)
-      }
-    })
-
-    // because 'beforeunload' isn't fired on mobile, so using document.visibilityState instead.
-    watch(visibility, () => {
-      if (isMobile.value) {
-        if (visibility.value == "visible") {
-          upsertData()
-        } else if (visibility.value == "hidden") {
-          deleteName()
-        }
+      } else {
+        // because 'beforeunload' isn't fired on mobile, so using document.visibilityState instead.
+        document.addEventListener("visibilitychange", function () {
+          if (document.visibilityState == "hidden") {
+            deleteName()
+          } else if (document.visibilityState == "visible") {
+            upsertData()
+          }
+        })
       }
     })
 
