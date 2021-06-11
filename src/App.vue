@@ -82,6 +82,19 @@ export default defineComponent({
     const { width, height } = useWindowSize()
     const { idle } = useIdle(500, { events: ["mousemove"] })
 
+    const isMobile = computed(() => {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        return true
+      } else {
+        return false
+      }
+    })
+    console.log(isMobile)
+
     const sessionId = uniqueNamesGenerator({
       dictionaries: [adjectives, names],
       length: 2,
@@ -133,6 +146,8 @@ export default defineComponent({
       currentUser.value = data ? data : []
       await upsertData()
       window.addEventListener("beforeunload", deleteName)
+      // if (!isMobile.value) {
+      // }
     })
 
     const deleteName = async () => {
@@ -152,7 +167,7 @@ export default defineComponent({
     }
 
     watch([x, y, idle], async () => {
-      if (throttleCheck.value) {
+      if (throttleCheck.value && !isMobile.value) {
         await upsertData()
       }
     })

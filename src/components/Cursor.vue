@@ -1,6 +1,7 @@
 <template>
   <div
     class="fixed transition-all duration-500 ease-in-out text-white"
+    v-if="x && y"
     :style="{ left: x + 'px', top: y + 'px' }"
   >
     <svg
