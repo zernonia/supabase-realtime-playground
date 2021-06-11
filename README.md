@@ -38,6 +38,9 @@ Then I look around the internet and couldn't find any similar example, thus insp
 
 After long hour of studying and replicating, I'm proud to present this **Open Source Supabase Realtime NextConf Clone** Playground 🔥
 
+> ⚠️ If you encountered any bugs🐛, please report it so that I can prepare my Bug Spray!
+
+
 ### 🔨 Built With
 
 - [Supabase](https://supabase.io/)
