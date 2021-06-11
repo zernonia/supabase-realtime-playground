@@ -1,27 +1,111 @@
-# Vue 3 + Typescript + Vite
+<!-- PROJECT LOGO -->
+<br />
+<p align="center">
+  <a href="https://github.com/zernonia/supabase-realtime-nextconf-clone">
+    <img src="images/main.svg" alt="Logo" width="80" height="80">
+  </a>
 
-This template should help get you started developing with Vue 3 and Typescript in Vite.
+  <h3 align="center">Supabase Schema</h3>
 
-## Recommended IDE Setup
+  <p align="center">
+    Secured & Simple <strong><a href="https://supabase.io/">Supabase</a> Schema Visualizer.</strong>
+    <br />
+    No installations • No Database password required.
+    <br />
+    <br />
+    <a href="https://supabase-realtime-nextconf-clone.vercel.app//">View Demo</a>
+    ·
+    <a href="https://github.com/zernonia/supabase-realtime-nextconf-clone/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/zernonia/supabase-realtime-nextconf-clone/issues">Request Feature</a>
+  </p>
+</p>
 
-[VSCode](https://code.visualstudio.com/) + [Vetur](https://marketplace.visualstudio.com/items?itemName=octref.vetur). Make sure to enable `vetur.experimental.templateInterpolationService` in settings!
+![Supabase Schema](images/main.jpeg)
 
-### If Using `<script setup>`
+## 🚀 Features
 
-[`<script setup>`](https://github.com/vuejs/rfcs/pull/227) is a feature that is currently in RFC stage. To get proper IDE support for the syntax, use [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) instead of Vetur (and disable Vetur).
+- 🎉 Play around with other user across the internet
+- ⌚ Realtime update Cursor and Button Count
 
-## Type Support For `.vue` Imports in TS
+## 📇 About The Project
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can use the following:
+> *TLDR* - **NextConf Realtime Clone using Supabase Realtime**
 
-### If Using Volar
+I was heavily inspired by [Next Conf](https://nextjs.org/conf#room-9q0s8)  realtime ⌚ functionalities, and take some time on learning how Next implement it.  Seems like they are using [Replicache](https://doc.replicache.dev/how-it-works) to implement the `Push/Pull` realtime functionalities.
 
-Run `Volar: Switch TS Plugin on/off` from VSCode command palette.
+Then I look around the internet and couldn't find any similar example, thus inspired me to take on the challenge, and utilizing [Supabase Realtime ⚡](https://supabase.io/docs/reference/javascript/subscribe) to replicate similar effect.
 
-### If Using Vetur
+After long hour of studying and replicating, I'm proud to present this **Open Source Supabase Realtime NextConf Clone** Playground 🔥
 
-1. Install and add `@vuedx/typescript-plugin-vue` to the [plugins section](https://www.typescriptlang.org/tsconfig#plugins) in `tsconfig.json`
-2. Delete `src/shims-vue.d.ts` as it is no longer needed to provide module info to Typescript
-3. Open `src/main.ts` in VSCode
-4. Open the VSCode command palette
-5. Search and run "Select TypeScript version" -> "Use workspace version"
+### 🔨 Built With
+
+- [Supabase](https://supabase.io/)
+- [Supabase Realtime](https://supabase.io/docs/reference/javascript/subscribe)
+- [Vue 3](https://v3.vuejs.org/)
+- [Vite](https://vitejs.dev/)
+- [WindiCSS](https://windicss.org/)
+
+## 🌎 Local Development
+
+### Prerequisites
+
+Yarn
+
+- ```sh
+  npm install --global yarn
+  ```
+
+### Development
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/zernonia/supabase-realtime-nextconf-clone.git
+   ```
+2. Install NPM packages
+   ```sh
+   yarn install
+   ```
+3. Run Development instance
+   ```sh
+   yarn dev
+   ```
+
+## ➕ Contributing
+
+This project is just for fun, but if you have any crazy idea for Realtime function, feel free to contribute, or create request for the features. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 🙏 Acknowledgement
+
+1. [Next Conf](https://nextjs.org/conf) for the inspiration.
+2. [Replicache](https://doc.replicache.dev/how-it-works) for studying how to replicate similar effect
+   
+
+## 📈 Analytics
+
+I'm using [Umami Analytics](https://umami.is/docs/about) because I'm interested in the distributions of user who uses Supabase and this tool.
+
+[This](https://umami-zernonia.vercel.app/share/X9ZCYkQJ/Supabase%20Realtime%20NextConf%20Clone) is the public URL for the analytics. Enjoy!
+
+## 📜 License
+
+Not Associated with Supabase.
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## 📧 Contact
+
+Zernonia - [@zernonia](https://twitter.com/zernonia) - zernonia@gmail.com
+
+
+## ☕ Support
+
+If you like my work, please buy me a coffee 😳
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png)](https://www.buymeacoffee.com/gbraad)
