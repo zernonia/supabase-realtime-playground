@@ -175,7 +175,7 @@ export default defineComponent({
       //     Authorization: `Bearer ${apikey}`,
       //   },
       // })
-      fetch(`/api/delete?id=${sessionId}`, {
+      fetch(`/api/delete?name=${sessionId}`, {
         keepalive: true,
       })
     }
