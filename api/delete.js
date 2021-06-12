@@ -1,11 +1,9 @@
 const apiurl = process.env.VITE_SUPABASE_URL
 const apikey = process.env.VITE_SUPABASE_KEY
 
-import { createClient } from "@supabase/supabase-js"
+const { createClient } = require("@supabase/supabase-js")
+const supabase = createClient(apiurl, apikey)
 
-export const supabase = createClient(apiurl, apikey)
-
-const supabase = require("./src")
 module.exports = (req, res) => {
   const {
     query: { name },
