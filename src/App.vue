@@ -45,7 +45,6 @@
     />
     <UserList
       class="fixed bottom-6 right-6 flex flex-col items-end"
-      :offset="isMobile ? 0 : 1"
       :users="currentUser"
     />
     <Cursor
@@ -58,14 +57,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  computed,
-  ref,
-  watch,
-  onMounted,
-  onBeforeUnmount,
-} from "vue"
+import { defineComponent, computed, ref, watch, onMounted } from "vue"
 import Cursor from "./components/Cursor.vue"
 import UserList from "./components/UserList.vue"
 import PlayButton from "./components/PlayButton.vue"
@@ -89,7 +81,7 @@ export default defineComponent({
     const prev = ref(0)
     const currentUser = ref<User[]>([])
     const now = useNow()
-    const { x, y } = useMouse()
+    const { x, y } = useMouse({ touch: false })
     const { width, height } = useWindowSize()
     const { idle } = useIdle(500, { events: ["mousemove"] })
 
@@ -143,7 +135,6 @@ export default defineComponent({
             let i = currentUser.value.findIndex(
               (o: User) => o.name == payload.new.name
             )
-            // console.log("Change received!", payload)
             currentUser.value[i] = payload.new
           }
         }
@@ -154,19 +145,16 @@ export default defineComponent({
       prev.value = Date.now()
       const { data } = await supabase.from<User>("realtime").select("*")
       currentUser.value = data ? data : []
-      if (!isMobile.value) {
-        await upsertData()
-        window.addEventListener("beforeunload", deleteName)
-      } else {
-        // because 'beforeunload' isn't fired on mobile, so using document.visibilityState instead.
-        // idk why this doesn't work, somebody sent HELP!
-        // document.addEventListener("visibilitychange", function () {
-        //   if (document.visibilityState == "hidden") {
-        //     deleteName()
-        //   } else if (document.visibilityState == "visible") {
-        //     upsertData()
-        //   }
-        // })
+      await upsertData()
+      window.addEventListener("beforeunload", deleteName)
+      if (isMobile.value) {
+        document.addEventListener("visibilitychange", function () {
+          if (document.visibilityState == "hidden") {
+            deleteName()
+          } else if (document.visibilityState == "visible") {
+            upsertData()
+          }
+        })
       }
     })
 
@@ -175,9 +163,6 @@ export default defineComponent({
       const apikey = import.meta.env.VITE_SUPABASE_KEY as string
       fetch(`${apiurl}/rest/v1/realtime?name=in.%28${sessionId}%29`, {
         method: "DELETE",
-        body: JSON.stringify({
-          name: sessionId,
-        }),
         keepalive: true,
         headers: {
           apikey,
@@ -198,6 +183,7 @@ export default defineComponent({
       width,
       height,
       isMobile,
+      deleteName,
     }
   },
 })

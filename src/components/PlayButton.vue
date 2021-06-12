@@ -99,7 +99,7 @@ export default defineComponent({
 
 <style lang="postcss">
 .play-button {
-  @apply w-62 px-10 py-4 my-1.5 lg:my-0 text-lg md:text-xl lg:text-2xl font-semibold select-none rounded-2xl transform transition-all outline-none;
+  @apply w-62 px-10 py-4 my-1.5 lg:my-0 text-lg lg:text-xl font-semibold select-none rounded-2xl transform transition-all outline-none;
 }
 .play-button:hover {
   @apply lg:scale-110;
