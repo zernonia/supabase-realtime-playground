@@ -38,7 +38,7 @@
         >
       </h1>
       <PlayButton />
-      <button @click.prevent="deleteName">Delete Name</button>
+      <button class="play-button" @click="deleteName">Delete Name</button>
     </div>
 
     <GithubButton
