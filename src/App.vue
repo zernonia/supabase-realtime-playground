@@ -167,33 +167,17 @@ export default defineComponent({
     const deleteName = async () => {
       const apiurl = import.meta.env.VITE_SUPABASE_URL as string
       const apikey = import.meta.env.VITE_SUPABASE_KEY as string
-      fetch(`${apiurl}/rest/v1/realtime?name=in.%28${sessionId}%29`, {
-        method: "DELETE",
+      // fetch(`${apiurl}/rest/v1/realtime?name=in.%28${sessionId}%29`, {
+      //   method: "DELETE",
+      //   keepalive: true,
+      //   headers: {
+      //     apikey,
+      //     Authorization: `Bearer ${apikey}`,
+      //   },
+      // })
+      fetch(`/api/delete?id=${sessionId}`, {
         keepalive: true,
-        headers: {
-          apikey,
-          Authorization: `Bearer ${apikey}`,
-        },
       })
-      // const xhr = new XMLHttpRequest()
-      // xhr.open(
-      //   "DELETE",
-      //   `${apiurl}/rest/v1/realtime?name=in.%28${sessionId}%29`
-      // )
-
-      // xhr.setRequestHeader("Connection", "keep-alive")
-      // xhr.setRequestHeader("Keep-Alive", "timeout=5, max=100")
-      // xhr.setRequestHeader("apikey", apikey)
-      // xhr.setRequestHeader("Authorization", `Bearer ${apikey}`)
-
-      // xhr.onreadystatechange = function () {
-      //   if (xhr.readyState === 4) {
-      //     console.log(xhr.status)
-      //     console.log(xhr.responseText)
-      //   }
-      // }
-
-      // xhr.send()
     }
 
     watch([x, y, idle], async () => {
