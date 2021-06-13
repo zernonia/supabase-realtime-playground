@@ -96,18 +96,3 @@ export default defineComponent({
   },
 })
 </script>
-
-<style lang="postcss">
-.play-button {
-  @apply w-62 px-10 py-4 my-1.5 lg:my-0 text-lg lg:text-xl font-semibold select-none rounded-2xl transform transition-all outline-none;
-}
-.play-button:hover {
-  @apply lg:scale-110;
-}
-.play-button:active {
-  @apply scale-95 lg:scale-100 outline-none;
-}
-.play-button:focus {
-  @apply outline-none;
-}
-</style>
