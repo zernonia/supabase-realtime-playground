@@ -57,7 +57,7 @@ export default {
     msg: String,
     color: String,
   },
-  setup(prop) {
+  setup(prop: any) {
     const { color, msg } = toRefs(prop)
     const box = ref()
     const width = ref(0)
