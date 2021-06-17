@@ -94,6 +94,7 @@ export default defineComponent({
         {
           id: store.id,
           name: store.name,
+          color: store.color,
           x: x.value / width.value,
           y: y.value / height.value,
           online: true,
