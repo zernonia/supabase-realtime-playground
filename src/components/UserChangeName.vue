@@ -46,21 +46,23 @@ export default defineComponent({
 
     const save = async () => {
       isEditing.value = false
-      if (newName.value == store.name) return
+      if (newName.value == store.name) {
+        store.handleBreak = false
+        return
+      }
       const { data, error } = await supabase
-        .from("realtime")
+        .from("realtime_user")
         .update({
           name: newName.value,
         })
         .match({
-          name: store.name,
+          id: store.id,
         })
       if (error) {
         newName.value = store.name
       } else {
         store.name = newName.value
       }
-      store.handleBreak = false
     }
 
     const editName = () => {

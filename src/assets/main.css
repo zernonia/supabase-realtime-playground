@@ -14,7 +14,7 @@ body {
   --dot-size: 5px;
   --dot-space: 22px;
   background: linear-gradient(90deg, #000 21px, transparent 1%) 50%,
-    linear-gradient(#000 21px, transparent 1%) 50%, #045a42;
+    linear-gradient(#000 21px, transparent 1%) 50%, #066348;
   background-size: var(--dot-space) var(--dot-space);
 }
 
@@ -29,4 +29,43 @@ body {
 }
 .play-button:focus {
   @apply outline-none;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-500 rounded-lg;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-dark-400;
+}
+
+.chat-list-item {
+  transition: all 1s;
+  display: inline-block;
+  margin-bottom: 30px;
+}
+.chat-list-enter, .chat-list-leave-to
+/* .chat-list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.chat-list-leave-active {
+  position: absolute;
+}
+
+.mask {
+  -webkit-mask-image: linear-gradient(to top, black 75%, transparent 100%);
+  mask-image: linear-gradient(to top, black 75%, transparent 100%);
 }

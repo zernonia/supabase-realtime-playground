@@ -54,7 +54,9 @@
       :key="cursor.name"
       :x="cursor.x * width"
       :y="cursor.y * height"
+      :name="cursor.name"
       :msg="cursor.message"
+      :color="cursor.color"
     />
   </main>
 </template>
@@ -88,8 +90,9 @@ export default defineComponent({
     })
 
     const upsertData = async () => {
-      await supabase.from<User>("realtime").upsert([
+      await supabase.from<User>("realtime_user").upsert([
         {
+          id: store.id,
           name: store.name,
           x: x.value / width.value,
           y: y.value / height.value,
@@ -99,21 +102,20 @@ export default defineComponent({
     }
 
     const listen = supabase
-      .from<User>(`realtime`)
+      .from<User>(`realtime_user`)
       .on("*", (payload) => {
-        if (payload.new.name != store.name) {
+        if (payload.new.id != store.id) {
           // check if user is online
-          console.log(payload.new)
           if (payload.new.online) {
             let i = currentUser.value.findIndex(
-              (o: User) => o.name == payload.new.name
+              (o: User) => o.id == payload.new.id
             )
             i == -1
               ? currentUser.value.push(payload.new)
               : (currentUser.value[i] = payload.new)
           } else {
             currentUser.value = currentUser.value.filter(
-              (item: User) => item.name != payload.new.name
+              (item: User) => item.id != payload.new.id
             )
           }
         }
@@ -122,15 +124,15 @@ export default defineComponent({
 
     onMounted(async () => {
       const { data } = await supabase
-        .from<User>("realtime")
+        .from<User>("realtime_user")
         .select("*")
         .eq("online", true)
-        .neq("name", store.name)
+        .neq("id", store.id)
       currentUser.value = data ? data : []
       upsertData()
       document.addEventListener("visibilitychange", function () {
         if (document.visibilityState == "hidden") {
-          navigator.sendBeacon(`/api/offline?name=${store.name}`)
+          navigator.sendBeacon(`/api/offline?id=${store.id}`)
         } else if (document.visibilityState == "visible") {
           upsertData()
         }

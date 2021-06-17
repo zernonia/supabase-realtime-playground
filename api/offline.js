@@ -6,17 +6,17 @@ const supabase = createClient(
 
 module.exports = (req, res) => {
   const {
-    query: { name },
+    query: { id },
   } = req
   // set timeout to wait for all previous request is done
   setTimeout(async () => {
     const { data, error } = await supabase
-      .from("realtime")
+      .from("realtime_user")
       .update({
         online: false,
       })
       .match({
-        name,
+        id,
       })
 
     res.json(data)

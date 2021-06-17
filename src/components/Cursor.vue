@@ -10,7 +10,7 @@
         height="1.5em"
         viewBox="0 0 24 24"
         class="stroke-2"
-        :class="[strokeColor]"
+        :class="[color ? cursorColor : 'stroke-green-500']"
       >
         <g fill="none">
           <path
@@ -19,64 +19,90 @@
           ></path>
         </g>
       </svg>
+
       <div
-        v-if="msg"
+        ref="box"
         class="
           text-white
-          bg-dark-400
-          ml-6
+          ml-3
           px-4
           py-2
+          transition-all
+          ease-in-out
+          duration-300
           shadow-md
-          rounded-2xl
+          rounded-xl
           max-w-64
         "
+        :class="[color ? bgColor : 'bg-green-500']"
       >
-        {{ msg }}
+        <p class="text-xs font-semibold">{{ name }}</p>
+        <p v-if="msg">
+          {{ msg }}
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { computed, ref } from "vue"
+import { computed, ref, toRefs, watch } from "vue"
 
 export default {
   name: "FluentCursor24Filled",
   props: {
     x: Number,
     y: Number,
+    name: String,
     msg: String,
+    color: String,
   },
-  setup() {
-    const color = computed(() => {
-      const r = Math.floor(Math.random() * 5)
-      switch (r) {
-        case 0:
-          return "-green-500"
-        case 1:
-          return "-blue-500"
-        case 2:
-          return "-red-500"
-        case 3:
-          return "-dark-500"
-        case 4:
-          return "-yellow-500"
-        default:
-          return "-green-500"
-      }
+  setup(prop) {
+    const { color, msg } = toRefs(prop)
+    const box = ref()
+    const width = ref(0)
+    const height = ref(0)
+
+    watch(msg, () => {
+      const el = box.value as HTMLElement
+      height.value = el.offsetHeight
+      width.value = el.offsetWidth
     })
 
     const bgColor = computed(() => {
-      return `bg${color.value}`
+      switch (color.value) {
+        case "blue":
+          return "bg-blue-500"
+        case "green":
+          return "bg-green-500"
+        case "dark":
+          return "bg-dark-500"
+        case "red":
+          return "bg-red-500"
+        case "yellow":
+          return "bg-yellow-500"
+      }
     })
-    const strokeColor = computed(() => {
-      return `stroke${color.value}`
+    const cursorColor = computed(() => {
+      switch (color.value) {
+        case "blue":
+          return "stroke-blue-500"
+        case "green":
+          return "stroke-green-500"
+        case "dark":
+          return "stroke-dark-500"
+        case "red":
+          return "stroke-red-500"
+        case "yellow":
+          return "stroke-yellow-500"
+      }
     })
-
     return {
+      box,
       bgColor,
-      strokeColor,
+      cursorColor,
+      width,
+      height,
     }
   },
 }

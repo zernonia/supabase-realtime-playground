@@ -10,6 +10,7 @@
           relative
           rounded-full
           flex flex-row
+          z-30
         "
       >
         <div class="w-10 h-10"></div>
@@ -27,6 +28,14 @@
           "
           @click="expandBox"
         />
+        <span
+          v-if="chatboxPing"
+          class="absolute right-0 flex h-3 w-3 shadow-xl"
+        >
+          <span
+            class="relative inline-flex rounded-full h-3 w-3 bg-green-500"
+          ></span>
+        </span>
         <div
           class="
             h-10
@@ -37,7 +46,7 @@
             duration-300
             ease-in-out
           "
-          :class="[isExpand ? ' w-72' : 'w-0']"
+          :class="[isExpand ? ' w-82' : 'w-0']"
         >
           <input
             ref="inputEl"
@@ -62,10 +71,51 @@
           </button>
         </div>
       </div>
-      <div class="absolute bottom-full left-0 w-72">
-        <ul>
-          <li v-for="msgItem in msgList" :key="msgItem.id">
-            {{ msgItem.message }}
+      <p v-if="!isExpand" class="ml-2 opacity-50 absolute top-2 left-full w-32">
+        Type "/" to chat
+      </p>
+      <div class="absolute bottom-full mb-4 left-0 w-98">
+        <ul
+          id="chatbox"
+          ref="chatboxEl"
+          class="
+            max-h-64
+            overflow-y-scroll
+            transition-all
+            duration-300
+            ease-in-out
+            transform
+          "
+          :class="[
+            chatboxPosition <= 20 ? '' : 'mask',
+            isExpand ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-32',
+          ]"
+          @scroll="chatboxScroll"
+        >
+          <li
+            class="mr-2"
+            v-for="(msgItem, index) in msgList"
+            :class="[msgItem.id ? '' : 'opacity-50']"
+            :key="msgItem.id"
+          >
+            <p
+              v-if="msgList[index].name_id != msgList[index - 1]?.name_id"
+              class="
+                px-4
+                py-2
+                mt-2
+                text-xs
+                inline-block
+                rounded-xl
+                font-semibold
+              "
+              :class="[msgItem.realtime_user.color ? bgColor : 'bg-green-500']"
+            >
+              {{ msgItem.realtime_user.name }}
+            </p>
+            <p class="py-3 px-4 my-2 bg-dark-500 rounded-xl">
+              {{ msgItem.message }}
+            </p>
           </li>
         </ul>
       </div>
@@ -74,8 +124,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue"
-import { throttledWatch, useIdle, onStartTyping } from "@vueuse/core"
+import { defineComponent, nextTick, onMounted, ref, watch } from "vue"
+import { throttledWatch, useIdle, onStartTyping, onKeyUp } from "@vueuse/core"
 import { supabase } from "../supabase"
 import { store } from "../store"
 import { Message } from "../interface"
@@ -84,6 +134,9 @@ export default defineComponent({
   setup() {
     const isExpand = ref(false)
     const inputEl = ref()
+    const chatboxEl = ref()
+    const chatboxPosition = ref(0)
+    const chatboxPing = ref(false)
     const msg = ref("")
     const msgList = ref<Message[]>([])
 
@@ -92,9 +145,9 @@ export default defineComponent({
     })
 
     const upsertTyping = async () => {
-      await supabase.from("realtime").upsert([
+      await supabase.from("realtime_user").upsert([
         {
-          name: store.name,
+          id: store.id,
           message: msg.value,
         },
       ])
@@ -103,21 +156,36 @@ export default defineComponent({
       const temp = msg.value
       msg.value = ""
       msgList.value.push({
-        name: store.name,
+        name_id: store.id,
+        realtime_user: {
+          name: store.name,
+          color: store.color,
+        },
         message: temp,
       })
       await supabase.from("realtime_chat").insert([
         {
-          name: store.name,
+          name_id: store.id,
           message: temp,
         },
       ])
     }
 
+    const chatboxScroll = (e: any) => {
+      chatboxPosition.value = e.srcElement.scrollTop
+    }
+
     const listenChatbox = supabase
       .from("realtime_chat")
-      .on("*", (payload) => {})
+      .on("*", () => {
+        fetchMsg()
+        if (!isExpand.value) {
+          chatboxPing.value = true
+        }
+      })
       .subscribe()
+
+    // Typing Event
 
     throttledWatch(
       [msg, idle],
@@ -131,29 +199,73 @@ export default defineComponent({
 
     const expandBox = () => {
       inputEl.value.focus()
+      chatboxPing.value = false
       isExpand.value = !isExpand.value
     }
 
-    onStartTyping(() => {
+    onKeyUp("Escape", () => {
+      if (!isExpand.value) return
+      isExpand.value = false
+    })
+    onKeyUp("/", () => {
       isExpand.value = true
+      chatboxPing.value = false
       if (!inputEl.value.active) inputEl.value.focus()
     })
 
-    onMounted(async () => {
-      const { data } = await supabase.from<Message>("realtime_chat").select("*")
+    const fetchMsg = async () => {
+      const { data } = await supabase
+        .from<Message>("realtime_chat")
+        .select("*, realtime_user(name, color)")
       msgList.value = data ? data : []
+    }
+    onMounted(() => {
+      fetchMsg()
+      upsertTyping()
     })
+
+    watch(
+      [msgList, isExpand],
+      () => {
+        const d = chatboxEl.value as HTMLUListElement
+        nextTick().then(() => {
+          d.scrollTop = d.scrollHeight
+        })
+      },
+      {
+        deep: true,
+      }
+    )
+
+    // Style username
+    const bgColor = (color: string) => {
+      switch (color) {
+        case "blue":
+          return "bg-blue-500"
+        case "green":
+          return "bg-green-500"
+        case "dark":
+          return "bg-dark-500"
+        case "red":
+          return "bg-red-500"
+        case "yellow":
+          return "bg-yellow-500"
+      }
+    }
 
     return {
       isExpand,
       msg,
       msgList,
       inputEl,
+      chatboxEl,
+      chatboxPosition,
+      chatboxPing,
       expandBox,
       insertMsg,
+      chatboxScroll,
+      bgColor,
     }
   },
 })
 </script>
-
-<style></style>
