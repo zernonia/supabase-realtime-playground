@@ -5,12 +5,12 @@
     <img src="images/main.svg" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Supabase Schema</h3>
+  <h3 align="center">Supabase Realtime NextConf Clone</h3>
 
   <p align="center">
-    Secured & Simple <strong><a href="https://supabase.io/">Supabase</a> Schema Visualizer.</strong>
+    Fun & Simple <strong><a href="https://supabase.io/">Supabase</a> Realtime NextConf Clone.</strong>
     <br />
-    No installations • No Database password required.
+    Realtime Play Button • Realtime Chat.
     <br />
     <br />
     <a href="https://supabase-realtime-nextconf-clone.vercel.app//">View Demo</a>
@@ -27,7 +27,7 @@
 
 - 🎉 Play around with other user across the internet
 - ⌚ Realtime update Cursor and Button Count
-- 🗣 Realtime chat
+- ⛅ Realtime chat
 
 ## 📇 About The Project
 
