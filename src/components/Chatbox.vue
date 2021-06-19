@@ -1,24 +1,13 @@
 <template>
-  <div>
-    <div class="relative">
-      <div
-        class="
-          border-2 border-white border-opacity-50
-          w-full
-          h-full
-          bg-dark-800
-          relative
-          rounded-full
-          flex flex-row
-          z-30
-        "
-      >
+  <div class="">
+    <div class="relative bg-black">
+      <div class="w-full h-full relative flex flex-row z-40">
         <div class="w-10 h-10"></div>
         <i-mdi:chat-processing
           class="
             w-10
             h-10
-            p-2
+            p-1
             cursor-pointer
             absolute
             top-0
@@ -39,14 +28,17 @@
         <div
           class="
             h-10
+            py-2
+            rounded-lg
             overflow-hidden
             flex flex-row
             item-center
             transition-all
             duration-300
             ease-in-out
+            bg-dark-800
           "
-          :class="[isExpand ? ' w-82' : 'w-0']"
+          :class="[isExpand ? ' w-48 md:w-64 xl:w-82 !px-2' : 'w-0']"
         >
           <input
             ref="inputEl"
@@ -54,7 +46,7 @@
             v-model="msg"
             placeholder="Type here..."
             class="
-              pl-0
+              pl-2
               w-full
               bg-transparent
               placeholder-dark-50
@@ -74,7 +66,7 @@
       <p v-if="!isExpand" class="ml-2 opacity-50 absolute top-2 left-full w-32">
         Type "/" to chat
       </p>
-      <div class="absolute bottom-full mb-4 left-0 w-98">
+      <div class="absolute bottom-full mb-4 left-0 w-64 md:w-80 xl:w-98">
         <ul
           id="chatbox"
           ref="chatboxEl"
@@ -106,14 +98,18 @@
                 mt-2
                 text-xs
                 inline-block
-                rounded-xl
+                rounded-lg
                 font-semibold
               "
-              :class="[msgItem.realtime_user.color ? bgColor : 'bg-green-500']"
+              :style="{
+                background: msgItem.realtime_user.color
+                  ? msgItem.realtime_user.color
+                  : '#10B981',
+              }"
             >
               {{ msgItem.realtime_user.name }}
             </p>
-            <p class="py-3 px-4 my-2 bg-dark-500 rounded-xl">
+            <p class="py-2 px-4 my-2 bg-dark-500 rounded-lg">
               {{ msgItem.message }}
             </p>
           </li>
@@ -125,7 +121,7 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, onMounted, ref, watch } from "vue"
-import { throttledWatch, useIdle, onStartTyping, onKeyUp } from "@vueuse/core"
+import { throttledWatch, useIdle, onKeyUp } from "@vueuse/core"
 import { supabase } from "../supabase"
 import { store } from "../store"
 import { Message } from "../interface"
@@ -198,9 +194,11 @@ export default defineComponent({
     )
 
     const expandBox = () => {
-      inputEl.value.focus()
-      chatboxPing.value = false
       isExpand.value = !isExpand.value
+      chatboxPing.value = false
+      if (!isExpand.value) {
+        inputEl.value.focus()
+      }
     }
 
     onKeyUp("Escape", () => {

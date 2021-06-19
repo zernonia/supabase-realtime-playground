@@ -1,7 +1,7 @@
 <template>
   <div
     class="fixed transition-all duration-500 ease-in-out text-white"
-    v-if="x && y"
+    v-if="!mobile"
     :style="{ left: x + 'px', top: y + 'px' }"
   >
     <div class="relative">
@@ -10,7 +10,7 @@
         height="1.5em"
         viewBox="0 0 24 24"
         class="stroke-2"
-        :class="[color ? cursorColor : 'stroke-green-500']"
+        :style="{ stroke: color ? color : '#10B981' }"
       >
         <g fill="none">
           <path
@@ -31,10 +31,10 @@
           ease-in-out
           duration-300
           shadow-md
-          rounded-xl
+          rounded-lg
           max-w-64
         "
-        :class="[color ? bgColor : 'bg-green-500']"
+        :style="{ background: color ? color : '#10B981' }"
       >
         <p class="text-xs font-semibold">{{ name }}</p>
         <p v-if="msg">
@@ -56,6 +56,7 @@ export default {
     name: String,
     msg: String,
     color: String,
+    mobile: Boolean,
   },
   setup(prop: any) {
     const { color, msg } = toRefs(prop)

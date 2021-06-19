@@ -7,19 +7,17 @@ export function uuidv4() {
 }
 
 export function randomColor() {
-  const r = Math.floor(Math.random() * 5)
+  const r = Math.floor(Math.random() * 4)
   switch (r) {
     case 0:
-      return "-green-500"
+      return "#10B981"
     case 1:
-      return "-blue-500"
+      return "#3B82F6"
     case 2:
-      return "-red-500"
+      return "#EF4444"
     case 3:
-      return "-dark-500"
-    case 4:
-      return "-yellow-500"
+      return "#F59E0B"
     default:
-      return "-green-500"
+      return "#10B981"
   }
 }
