@@ -45,7 +45,7 @@
     <GithubButton
       class="fixed top-6 right-6 w-8 h-8 opacity-50 hover:opacity-100"
     />
-    <Chatbox class="fixed bottom-6 left-6" />
+    <Chatbox :mobile="isMobile" class="fixed bottom-6 left-6" />
     <UserList
       class="fixed bottom-6 right-6 flex flex-col items-end"
       :users="currentUser"

@@ -87,8 +87,8 @@
 }
 
 .mask {
-  -webkit-mask-image: linear-gradient(to top, black 75%, transparent 100%);
-  mask-image: linear-gradient(to top, black 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 90%, transparent 100%);
+  mask-image: linear-gradient(to top, black 90%, transparent 100%);
 }
 
 input[type="color"] {
