@@ -1,6 +1,9 @@
 <template>
   <div class="z-40" ref="chatboxParent">
-    <div class="relative w-74 md:w-auto bg-black bg-opacity-50">
+    <div
+      class="relative bg-black bg-opacity-50"
+      :class="[isExpand ? 'w-74 md:w-auto' : '']"
+    >
       <div class="w-full h-full relative flex flex-row">
         <div class="w-10 h-10"></div>
         <i-mdi:chat-processing
