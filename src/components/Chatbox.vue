@@ -1,6 +1,6 @@
 <template>
   <div class="z-40" ref="chatboxParent">
-    <div class="relative">
+    <div class="relative w-74 md:w-auto bg-black bg-opacity-50">
       <div class="w-full h-full relative flex flex-row">
         <div class="w-10 h-10"></div>
         <i-mdi:chat-processing
@@ -38,7 +38,7 @@
             ease-in-out
             bg-dark-800
           "
-          :class="[isExpand ? ' w-58 md:w-64 xl:w-82 !px-2' : 'w-0']"
+          :class="[isExpand ? ' w-60 md:w-64 xl:w-82 !px-2' : 'w-0']"
         >
           <input
             ref="inputEl"
@@ -81,7 +81,7 @@
             rounded-lg
             bottom-full
             md:mb-4
-            mb-1
+            mb-0
             pt-2
             left-0
           "
