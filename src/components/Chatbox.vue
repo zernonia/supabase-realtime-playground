@@ -1,6 +1,6 @@
 <template>
-  <div class="z-40">
-    <div class="relative bg-black">
+  <div class="z-40" ref="chatboxParent">
+    <div class="relative">
       <div class="w-full h-full relative flex flex-row">
         <div class="w-10 h-10"></div>
         <i-mdi:chat-processing
@@ -80,7 +80,9 @@
             absolute
             rounded-lg
             bottom-full
-            mb-4
+            md:mb-4
+            mb-1
+            pt-2
             left-0
           "
         >
@@ -109,7 +111,8 @@
                 class="
                   px-4
                   py-2
-                  mt-2
+                  mt-0.5
+                  md:mt-2
                   text-xs
                   inline-block
                   rounded-lg
@@ -136,7 +139,7 @@
 
 <script lang="ts">
 import { defineComponent, nextTick, onMounted, ref, watch } from "vue"
-import { throttledWatch, useIdle, onKeyUp } from "@vueuse/core"
+import { throttledWatch, useIdle, onKeyUp, onClickOutside } from "@vueuse/core"
 import { supabase } from "../supabase"
 import { store } from "../store"
 import { Message } from "../interface"
@@ -149,6 +152,7 @@ export default defineComponent({
     const isExpand = ref(false)
     const inputEl = ref()
     const chatboxEl = ref()
+    const chatboxParent = ref()
     const chatboxPosition = ref(0)
     const chatboxPing = ref(false)
     const msg = ref("")
@@ -167,6 +171,7 @@ export default defineComponent({
       ])
     }
     const insertMsg = async () => {
+      if (!msg.value) return
       const temp = msg.value
       msg.value = ""
       msgList.value.push({
@@ -241,6 +246,10 @@ export default defineComponent({
       upsertTyping()
     })
 
+    onClickOutside(chatboxParent, () => {
+      isExpand.value = false
+    })
+
     watch(
       [msgList, isExpand],
       () => {
@@ -257,34 +266,18 @@ export default defineComponent({
       }
     )
 
-    // Style username
-    const bgColor = (color: string) => {
-      switch (color) {
-        case "blue":
-          return "bg-blue-500"
-        case "green":
-          return "bg-green-500"
-        case "dark":
-          return "bg-dark-500"
-        case "red":
-          return "bg-red-500"
-        case "yellow":
-          return "bg-yellow-500"
-      }
-    }
-
     return {
       isExpand,
       msg,
       msgList,
       inputEl,
       chatboxEl,
+      chatboxParent,
       chatboxPosition,
       chatboxPing,
       expandBox,
       insertMsg,
       chatboxScroll,
-      bgColor,
     }
   },
 })

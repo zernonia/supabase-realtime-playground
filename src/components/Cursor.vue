@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { computed, ref, toRefs, watch } from "vue"
+import { computed, ref, toRefs } from "vue"
 
 export default {
   name: "FluentCursor24Filled",
@@ -59,16 +59,8 @@ export default {
     mobile: Boolean,
   },
   setup(prop: any) {
-    const { color, msg } = toRefs(prop)
+    const { color } = toRefs(prop)
     const box = ref()
-    const width = ref(0)
-    const height = ref(0)
-
-    watch(msg, () => {
-      const el = box.value as HTMLElement
-      height.value = el.offsetHeight
-      width.value = el.offsetWidth
-    })
 
     const bgColor = computed(() => {
       switch (color.value) {
@@ -102,8 +94,6 @@ export default {
       box,
       bgColor,
       cursorColor,
-      width,
-      height,
     }
   },
 }
