@@ -21,12 +21,13 @@
   </p>
 </p>
 
-![Supabase Schema](images/main.jpeg)
+![Supabase Schema](images/main.png)
 
 ## 🚀 Features
 
 - 🎉 Play around with other user across the internet
 - ⌚ Realtime update Cursor and Button Count
+- 🗣 Realtime chat
 
 ## 📇 About The Project
 
