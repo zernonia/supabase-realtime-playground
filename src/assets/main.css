@@ -1,0 +1,103 @@
+.grad-text {
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+.bg-dot {
+  position: relative;
+  background-color: #000;
+  --dot-size: 5px;
+  --dot-space: 22px;
+  background: linear-gradient(90deg, #000 21px, transparent 1%) 50%,
+    linear-gradient(#000 21px, transparent 1%) 50%, #066348;
+  background-size: var(--dot-space) var(--dot-space);
+}
+
+.play-button {
+  @apply w-62 px-10 py-4 my-1.5 lg:my-0 text-lg lg:text-xl font-semibold select-none rounded-2xl transform transition-all outline-none;
+}
+.play-button:hover {
+  @apply lg:scale-110;
+}
+.play-button:active {
+  @apply scale-95 lg:scale-100 outline-none;
+}
+.play-button:focus {
+  @apply outline-none;
+}
+.btn {
+  @apply transform transition-all select-none outline-none;
+}
+.btn:hover {
+  @apply lg:scale-110;
+}
+.btn:active {
+  @apply scale-95 lg:scale-100 outline-none;
+}
+.btn:focus {
+  @apply outline-none;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  @apply bg-dark-500 rounded-lg;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-dark-400;
+}
+
+.chat-list-item {
+  transition: all 0.3s ease-in-out;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+.chat-list-enter, .chat-list-leave-to
+/* .chat-list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.chat-list-leave-active {
+  position: absolute;
+}
+
+.slide-up-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-up-leave-active {
+  transition: all 0.3s ease-in-out;
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.mask {
+  -webkit-mask-image: linear-gradient(to top, black 90%, transparent 100%);
+  mask-image: linear-gradient(to top, black 90%, transparent 100%);
+}
+
+input[type="color"] {
+  -webkit-appearance: none;
+  @apply border-none w-8 h-8;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+}

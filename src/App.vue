@@ -9,6 +9,7 @@
       items-center
       bg-dot
     "
+    :style="{ cursor: selectedCursor }"
   >
     <div class="flex flex-col items-center mb-12">
       <h1
@@ -32,7 +33,7 @@
             grad-text
             bg-gradient-to-r
             from-green-300
-            to-green-700
+            to-green-500
           "
           >Supabase Realtime + Vue</span
         >
@@ -40,9 +41,11 @@
       <PlayButton />
     </div>
 
+    <Settings class="fixed top-6 right-16" />
     <GithubButton
       class="fixed top-6 right-6 w-8 h-8 opacity-50 hover:opacity-100"
     />
+    <Chatbox :mobile="isMobile" class="fixed bottom-6 left-6" />
     <UserList
       class="fixed bottom-6 right-6 flex flex-col items-end"
       :users="currentUser"
@@ -52,38 +55,35 @@
       :key="cursor.name"
       :x="cursor.x * width"
       :y="cursor.y * height"
+      :name="cursor.name"
+      :msg="cursor.message"
+      :color="cursor.color"
+      :mobile="cursor.mobile"
     />
   </main>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, watch, onMounted } from "vue"
-import Cursor from "./components/Cursor.vue"
-import UserList from "./components/UserList.vue"
-import PlayButton from "./components/PlayButton.vue"
-import GithubButton from "./components/GithubButton.vue"
+import { defineComponent, computed, ref, onMounted } from "vue"
 import { supabase } from "./supabase"
-import { useMouse, useNow, useWindowSize, useIdle } from "@vueuse/core"
-import { uniqueNamesGenerator, adjectives, names } from "unique-names-generator"
+import { useMouse, throttledWatch, useWindowSize, useIdle } from "@vueuse/core"
 import { User } from "./interface"
+import { store } from "./store"
 
 export default defineComponent({
   name: "App",
-  components: {
-    Cursor,
-    UserList,
-    PlayButton,
-    GithubButton,
-  },
   setup() {
     const name = ref("")
-    const throttle = ref(500)
-    const prev = ref(0)
     const currentUser = ref<User[]>([])
-    const now = useNow()
     const { x, y } = useMouse({ touch: false })
     const { width, height } = useWindowSize()
     const { idle } = useIdle(500, { events: ["mousemove"] })
+
+    const selectedCursor = computed(() => {
+      return `url("data:image/svg+xml,%3Csvg width='19' height='23' viewBox='0 0 19 23' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.91113 0.587501C1.803 -0.276499 0.1875 0.513251 0.1875 1.91725V21.0524C0.1875 22.6521 2.20688 23.3541 3.19913 22.0986L7.91288 16.1361C8.0868 15.9164 8.30822 15.7389 8.56053 15.6169C8.81285 15.4949 9.0895 15.4317 9.36975 15.4319H17.0783C18.6847 15.4319 19.3834 13.3979 18.1144 12.4124L2.91113 0.586376V0.587501Z' fill='${encodeURIComponent(
+        store.color
+      )}'/%3E%3Cpath d='M2.91113 0.587501C1.803 -0.276499 0.1875 0.513251 0.1875 1.91725V21.0524C0.1875 22.6521 2.20688 23.3541 3.19913 22.0986L7.91288 16.1361C8.0868 15.9164 8.30822 15.7389 8.56053 15.6169C8.81285 15.4949 9.0895 15.4317 9.36975 15.4319H17.0783C18.6847 15.4319 19.3834 13.3979 18.1144 12.4124L2.91113 0.586376V0.587501Z' stroke='white'/%3E%3C/svg%3E%0A"), default`
+    })
 
     const isMobile = computed(() => {
       if (
@@ -97,85 +97,69 @@ export default defineComponent({
       }
     })
 
-    const sessionId = uniqueNamesGenerator({
-      dictionaries: [adjectives, names],
-      length: 2,
-    })
-
-    const throttleCheck = computed(() => {
-      if (now.value.getTime() >= prev.value + throttle.value) {
-        prev.value = now.value.getTime()
-        return true
-      } else {
-        return false
-      }
-    })
-
     const upsertData = async () => {
-      await supabase.from<User>("realtime").upsert([
+      await supabase.from<User>("realtime_user").upsert([
         {
-          name: sessionId,
+          id: store.id,
+          name: store.name,
+          color: store.color,
           x: x.value / width.value,
           y: y.value / height.value,
+          online: true,
+          mobile: isMobile.value,
         },
       ])
     }
 
     const listen = supabase
-      .from<User>(`realtime`)
+      .from<User>(`realtime_user`)
       .on("*", (payload) => {
-        if (payload.new.name != sessionId) {
-          if (payload.eventType == "INSERT") {
-            currentUser.value.push(payload.new)
-          } else if (payload.eventType == "DELETE") {
-            currentUser.value = currentUser.value.filter(
-              (item: User) => item.name != payload.old.name
-            )
-          } else {
+        if (payload.new.id != store.id) {
+          // check if user is online
+          if (payload.new.online) {
             let i = currentUser.value.findIndex(
-              (o: User) => o.name == payload.new.name
+              (o: User) => o.id == payload.new.id
             )
-            currentUser.value[i] = payload.new
+            i == -1
+              ? currentUser.value.push(payload.new)
+              : (currentUser.value[i] = payload.new)
+          } else {
+            currentUser.value = currentUser.value.filter(
+              (item: User) => item.id != payload.new.id
+            )
           }
         }
       })
       .subscribe()
 
     onMounted(async () => {
-      prev.value = Date.now()
-      const { data } = await supabase.from<User>("realtime").select("*")
+      const { data } = await supabase
+        .from<User>("realtime_user")
+        .select("*")
+        .eq("online", true)
+        .neq("id", store.id)
       currentUser.value = data ? data : []
-      await upsertData()
-      window.addEventListener("beforeunload", deleteName)
-      if (isMobile.value) {
-        document.addEventListener("visibilitychange", function () {
-          if (document.visibilityState == "hidden") {
-            deleteName()
-          } else if (document.visibilityState == "visible") {
-            upsertData()
-          }
-        })
-      }
-    })
-
-    const deleteName = async () => {
-      const apiurl = import.meta.env.VITE_SUPABASE_URL as string
-      const apikey = import.meta.env.VITE_SUPABASE_KEY as string
-      fetch(`${apiurl}/rest/v1/realtime?name=in.%28${sessionId}%29`, {
-        method: "DELETE",
-        keepalive: true,
-        headers: {
-          apikey,
-          Authorization: `Bearer ${apikey}`,
-        },
+      upsertData()
+      document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState == "hidden") {
+          navigator.sendBeacon(`/api/offline?id=${store.id}`)
+        } else if (document.visibilityState == "visible") {
+          upsertData()
+        }
       })
-    }
-
-    watch([x, y, idle], async () => {
-      if (throttleCheck.value && !isMobile.value) {
-        await upsertData()
+      if (isMobile.value) {
       }
     })
+
+    throttledWatch(
+      [x, y, idle],
+      () => {
+        if (!isMobile.value && !store.handleBreak) {
+          upsertData()
+        }
+      },
+      { throttle: 500 }
+    )
 
     return {
       name,
@@ -183,31 +167,8 @@ export default defineComponent({
       width,
       height,
       isMobile,
-      deleteName,
+      selectedCursor,
     }
   },
 })
 </script>
-
-<style>
-.grad-text {
-  -webkit-text-fill-color: transparent;
-  -webkit-background-clip: text;
-  background-clip: text;
-}
-.bg-dot {
-  position: relative;
-  background-color: #000;
-  --dot-size: 5px;
-  --dot-space: 22px;
-  background: linear-gradient(90deg, #000 21px, transparent 1%) 50%,
-    linear-gradient(#000 21px, transparent 1%) 50%, #045a42;
-  background-size: var(--dot-space) var(--dot-space);
-}
-
-body {
-  cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAbCAYAAACN1PRVAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAF2SURBVHgB7ZavT8NAFMe/HUUUBoGBG+IE8wRTgwBZx7+AwJI5JEVOjR+WhAk0OCY7EhBDIDAkjISaKWAsBdKEAeU9QhMEaa+3Vm2f5NLX9u4+uXv30gIDRxAEgtoJtUOOkSUkcE6924AbcZ+GMBf1sum3UX+9w1H3WvjBBwvLyEoWcknSysM5Op9+lYRVKCIlY0iEyuMFGm9uWXVbpWWM/9XDsXeD+ktL0K1DwtUk4xPJQjiPtEpBq+XTuiU7TknGtHse9p6aaL137N8SEXFjlGUM53GfhLStvJ1OnLAvWYhseaQiY2TKIzUZE1ceqcqYf8pjITNZCOfx4PlKUGiHz3QoYOR0mMYciqOTkf0KIwZfXGUZizZnl3iiGt2exfXXNK2mLLPyJRbt0iSJvwCJcmZNlLA8LlwVUSIZ58fKz7sUrkARKRknen16kcM1WpULRaRkGzMmC7dJ1EAfRB2QrmkUUdDHfk4eiWxkxZ+/qx1qUxgSwTdeGtNuJGLJSwAAAABJRU5ErkJggg==")
-      0 0,
-    default;
-}
-</style>
