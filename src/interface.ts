@@ -7,6 +7,7 @@ export interface User {
   online: boolean
   color: string
   mobile: boolean
+  last_active: string
 }
 
 export interface Realtime_User {
