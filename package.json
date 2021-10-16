@@ -13,14 +13,14 @@
   },
   "devDependencies": {
     "@iconify/json": "^1.1.355",
-    "@vitejs/plugin-vue": "^1.2.3",
-    "@vue/compiler-sfc": "^3.2.11",
+    "@vitejs/plugin-vue": "^1.9.3",
+    "@vue/compiler-sfc": "^3.2.20",
     "typescript": "^4.3.2",
-    "vite": "^2.3.7",
+    "vite": "^2.6.7",
     "vite-plugin-components": "^0.11.1",
     "vite-plugin-icons": "^0.6.2",
     "vite-plugin-windicss": "^1.0.3",
-    "vue-tsc": "^0.0.24",
-    "windicss": "^3.1.7"
+    "vue-tsc": "^0.28.6",
+    "windicss": "^3.1.9"
   }
 }
