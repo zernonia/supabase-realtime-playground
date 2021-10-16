@@ -1,10 +1,7 @@
 <template>
   <div ref="el">
     <div class="relative">
-      <button
-        class="w-8 h-8 p-0.5 opacity-50 hover:opacity-100 focus:outline-none"
-        @click="isEditing = !isEditing"
-      >
+      <button class="w-8 h-8 p-0.5 opacity-50 hover:opacity-100 focus:outline-none" @click="isEditing = !isEditing">
         <i-topcoat:settings class="w-full h-full" />
       </button>
       <transition name="slide-up">
@@ -26,50 +23,14 @@
           "
         >
           <label class="mr-2 font-semibold" for="name">Name</label>
-          <input
-            class="
-              text-sm
-              bg-black
-              placeholder-dark-500
-              rounded-md
-              px-4
-              py-2
-              mt-2
-              h-10
-              border-transparent
-              focus:border-light-500
-              focus:ring-light-500
-            "
-            type="text"
-            v-model="newName"
-          />
+          <input type="text" v-model="newName" />
           <label class="text-sm mt-2 font-semibold" for="color">Color</label>
-          <div
-            class="
-              rounded-full
-              border-2 border-black
-              overflow-hidden
-              my-1
-              w-8
-              h-8
-            "
-          >
+          <div class="rounded-full border-2 border-black overflow-hidden my-1 w-8 h-8">
             <input type="color" name="color" v-model="newColor" />
           </div>
           <button
             @click.prevent="save"
-            class="
-              btn
-              flex flex-row
-              items-center
-              justify-center
-              mt-2
-              bg-dark-900
-              font-semibold
-              rounded-lg
-              text-sm
-              py-2
-            "
+            class="btn flex flex-row items-center justify-center mt-2 bg-dark-900 font-semibold rounded-lg text-sm py-2"
           >
             {{ isLoading ? "Updating..." : "Save" }}
             <i-gg:spinner v-if="isLoading" class="ml-2 animate-spin" />

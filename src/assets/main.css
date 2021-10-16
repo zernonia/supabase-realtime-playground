@@ -8,8 +8,8 @@
   background-color: #000;
   --dot-size: 5px;
   --dot-space: 22px;
-  background: linear-gradient(90deg, #000 21px, transparent 1%) 50%,
-    linear-gradient(#000 21px, transparent 1%) 50%, #066348;
+  background: linear-gradient(90deg, #000 21px, transparent 1%) 50%, linear-gradient(#000 21px, transparent 1%) 50%,
+    #066348;
   background-size: var(--dot-space) var(--dot-space);
 }
 
@@ -89,6 +89,9 @@
 .mask {
   -webkit-mask-image: linear-gradient(to top, black 90%, transparent 100%);
   mask-image: linear-gradient(to top, black 90%, transparent 100%);
+}
+input[type="text"] {
+  @apply text-sm bg-black placeholder-dark-500 rounded-md px-4 py-2 mt-2 h-10 border-transparent focus:border-light-500 focus:ring-light-500;
 }
 
 input[type="color"] {
