@@ -183,9 +183,8 @@ export default defineComponent({
       msgList.value = data ? data : []
     }
 
-    onMounted(() => {
-      fetchMsg()
-    })
+    listenRealtime.value = listen()
+    fetchMsg()
 
     onClickOutside(chatboxParent, () => {
       isExpand.value = false

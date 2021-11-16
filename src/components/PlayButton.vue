@@ -76,6 +76,7 @@ const fetchData = async () => {
     : ""
 }
 
+listenRealtime.value = listen()
 fetchData()
 
 watch(idle, async (n) => {
