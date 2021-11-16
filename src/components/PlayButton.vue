@@ -19,13 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, watch } from "vue"
+import { ref, watch } from "vue"
 import { supabase } from "../supabase"
-import { BarChart } from "vue-chart-3"
-import { Chart, registerables } from "chart.js"
 import { idle } from "@/composable"
-
-Chart.register(...registerables)
 
 const countLove = ref(0)
 const countWow = ref(0)
@@ -87,26 +83,5 @@ watch(idle, async (n) => {
     fetchData()
     listenRealtime.value = listen()
   }
-})
-
-const chartData = computed(() => {
-  return {
-    labels: ["Love", "Wow", "Unique"],
-    datasets: [
-      {
-        data: [countLove.value, countWow.value, countUnique.value],
-        backgroundColor: ["#a62121", "#fbc83d", "#d12696"],
-      },
-    ],
-  }
-})
-
-const options = ref({
-  indexAxis: "y",
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
 })
 </script>

@@ -8,10 +8,8 @@
   "dependencies": {
     "@supabase/supabase-js": "^1.24.0",
     "@vueuse/core": "^6.8.0",
-    "chart.js": "^3.6.0",
     "unique-names-generator": "^4.5.0",
-    "vue": "^3.2.20",
-    "vue-chart-3": "^0.5.11"
+    "vue": "^3.2.20"
   },
   "devDependencies": {
     "@iconify/json": "^1.1.355",
