@@ -12,6 +12,9 @@ export const store = reactive({
       length: 2,
     })
   ),
+  image: useStorage("realtime_image", ""),
   color: useStorage("user_color", randomColor()),
   handleBreak: false,
+  loginModal: useStorage("show_login_modal", true),
+  loginWithGithub: useStorage("login_with_github", false),
 })

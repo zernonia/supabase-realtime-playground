@@ -22,21 +22,13 @@
 
       <div
         ref="box"
-        class="
-          text-white
-          ml-3
-          px-4
-          py-2
-          transition-all
-          ease-in-out
-          duration-300
-          shadow-md
-          rounded-lg
-          max-w-64
-        "
+        class="text-white ml-3 px-4 py-2 transition-all ease-in-out duration-300 shadow-md rounded-lg max-w-64"
         :style="{ background: color ? color : '#10B981' }"
       >
-        <p class="text-xs font-semibold">{{ name }}</p>
+        <div class="flex items-center">
+          <img class="w-6 h-6 rounded-full mr-2" v-if="image" :src="image" />
+          <p class="text-xs font-semibold">{{ name }}</p>
+        </div>
         <p v-if="msg">
           {{ msg }}
         </p>
@@ -57,6 +49,7 @@ export default {
     msg: String,
     color: String,
     mobile: Boolean,
+    image: String,
   },
   setup(prop: any) {
     const { color } = toRefs(prop)

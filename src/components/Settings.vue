@@ -5,8 +5,7 @@
         <i-topcoat:settings class="w-full h-full" />
       </button>
       <transition name="slide-up">
-        <form
-          v-if="isEditing"
+        <div
           class="
             p-4
             absolute
@@ -21,21 +20,54 @@
             ease-in-out
             duration-300
           "
+          v-if="isEditing"
         >
-          <label class="mr-2 font-semibold" for="name">Name</label>
-          <input type="text" v-model="newName" />
-          <label class="text-sm mt-2 font-semibold" for="color">Color</label>
-          <div class="rounded-full border-2 border-black overflow-hidden my-1 w-8 h-8">
-            <input type="color" name="color" v-model="newColor" />
-          </div>
+          <form class="flex flex-col">
+            <label class="mr-2 font-semibold" for="name">Name</label>
+            <input class="input" type="text" v-model="newName" />
+            <label class="text-sm mt-2 font-semibold" for="color">Color</label>
+            <div class="rounded-full border-2 border-black overflow-hidden my-1 w-8 h-8">
+              <input type="color" name="color" v-model="newColor" />
+            </div>
+            <button
+              @click.prevent="save"
+              class="
+                btn
+                flex flex-row
+                items-center
+                justify-center
+                mt-2
+                bg-dark-900
+                font-semibold
+                rounded-lg
+                text-sm
+                py-2
+              "
+            >
+              {{ isLoading ? "Updating..." : "Save" }}
+              <i-gg:spinner v-if="isLoading" class="ml-2 animate-spin" />
+            </button>
+          </form>
+
           <button
-            @click.prevent="save"
-            class="btn flex flex-row items-center justify-center mt-2 bg-dark-900 font-semibold rounded-lg text-sm py-2"
+            v-if="store.loginWithGithub == false"
+            class="
+              mt-2
+              py-2
+              text-sm
+              font-semibold
+              rounded-lg
+              bg-green-500
+              flex
+              items-center
+              justify-center
+              focus:outline-none focus:ring focus:ring-green-400
+            "
+            @click="login"
           >
-            {{ isLoading ? "Updating..." : "Save" }}
-            <i-gg:spinner v-if="isLoading" class="ml-2 animate-spin" />
+            <i-mdi:github class="mr-2"></i-mdi:github> Login with Github
           </button>
-        </form>
+        </div>
       </transition>
     </div>
   </div>
@@ -56,6 +88,11 @@ export default defineComponent({
     const el = ref(null)
 
     onClickOutside(el, (e) => (isEditing.value = false))
+
+    const login = () => {
+      store.loginModal = true
+      isEditing.value = false
+    }
 
     const save = async () => {
       isLoading.value = true
@@ -86,15 +123,12 @@ export default defineComponent({
 
     watch(isEditing, (nVal, oVal) => {
       if (nVal) {
+        newName.value = store.name
+        newColor.value = store.color
         store.handleBreak = true
       } else {
         store.handleBreak = false
       }
-    })
-
-    onMounted(() => {
-      newName.value = store.name
-      newColor.value = store.color
     })
 
     return {
@@ -105,6 +139,7 @@ export default defineComponent({
       isEditing,
       isLoading,
       save,
+      login,
     }
   },
 })

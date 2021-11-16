@@ -8,11 +8,13 @@ export interface User {
   color: string
   mobile: boolean
   last_active: string
+  image: string
 }
 
 export interface Realtime_User {
   name: string
   color: string
+  image: string
 }
 
 export interface Message {
