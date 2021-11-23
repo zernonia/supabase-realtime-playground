@@ -1,23 +1,23 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/zernonia/supabase-realtime-nextconf-clone">
+  <a href="https://github.com/zernonia/supabase-realtime-playground">
     <img src="images/main.svg" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Supabase Realtime NextConf Clone</h3>
+  <h3 align="center">Supabase Realtime Playground</h3>
 
   <p align="center">
-    Fun & Simple <strong><a href="https://supabase.io/">Supabase</a> Realtime NextConf Clone.</strong>
+    Fun & Simple <strong><a href="https://supabase.io/">Supabase</a> Realtime Demo.</strong>
     <br />
     Realtime Play Button • Realtime Chat.
     <br />
     <br />
-    <a href="https://supabase-realtime-nextconf-clone.vercel.app//">View Demo</a>
+    <a href="https://supabase-realtime-playground.vercel.app/">View Demo</a>
     ·
-    <a href="https://github.com/zernonia/supabase-realtime-nextconf-clone/issues">Report Bug</a>
+    <a href="https://github.com/zernonia/supabase-realtime-playground/issues">Report Bug</a>
     ·
-    <a href="https://github.com/zernonia/supabase-realtime-nextconf-clone/issues">Request Feature</a>
+    <a href="https://github.com/zernonia/supabase-realtime-playground/issues">Request Feature</a>
   </p>
 </p>
 
@@ -25,6 +25,7 @@
 
 ## 🚀 Features
 
+- 🐤 Twitter Auth
 - 🎉 Play around with other user across the internet
 - ⌚ Realtime update Cursor and Button Count
 - ⛅ Realtime chat
@@ -37,7 +38,7 @@ I was heavily inspired by [Next Conf](https://nextjs.org/conf#room-9q0s8) realti
 
 Then I look around the internet and couldn't find any similar example, thus inspired me to take on the challenge, and utilizing [Supabase Realtime ⚡](https://supabase.io/docs/reference/javascript/subscribe) to replicate similar effect.
 
-After long hour of studying and replicating, I'm proud to present this **Open Source Supabase Realtime NextConf Clone** Playground 🔥
+After long hour of studying and replicating, I'm proud to present this **Open Source Supabase Realtime Playground** 🔥
 
 > ⚠️ If you encountered any bugs🐛, please report it so that I can prepare my Bug Spray!
 
@@ -82,7 +83,7 @@ create table realtime_user (
 -- chat table
 create table realtime_chat (
   id uuid default uuid_generate_v4() primary key,
-  name_id uuid references realtime_user (id),
+  name_id uuid references realtime_user on delete cascade,
   created_at timestamp default now(),
   message text
 );
@@ -173,7 +174,7 @@ Yarn
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/zernonia/supabase-realtime-nextconf-clone.git
+   git clone https://github.com/zernonia/supabase-realtime-playground.git
    ```
 2. Install NPM packages
    ```sh
@@ -198,12 +199,6 @@ This project is just for fun, but if you have any crazy idea for Realtime functi
 
 1. [Next Conf](https://nextjs.org/conf) for the inspiration.
 2. [Replicache](https://doc.replicache.dev/how-it-works) for studying how to replicate similar effect
-
-## 📈 Analytics
-
-I'm using [Umami Analytics](https://umami.is/docs/about) because I'm interested in the distributions of user who uses Supabase and this tool.
-
-[This](https://umami-zernonia.vercel.app/share/X9ZCYkQJ/Supabase%20Realtime%20NextConf%20Clone) is the public URL for the analytics. Enjoy!
 
 ## 📜 License
 
