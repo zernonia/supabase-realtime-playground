@@ -40,6 +40,7 @@ const listen = () =>
   supabase
     .from("realtime_playbutton")
     .on("UPDATE", (payload) => {
+      console.log(payload)
       const { count, name } = payload.new
       name == "love"
         ? count > countLove.value

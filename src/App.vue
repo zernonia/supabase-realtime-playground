@@ -134,7 +134,7 @@ watch(idle, async (n) => {
 // login Github
 supabase.auth.onAuthStateChange(async (ev, session) => {
   if (ev == "SIGNED_IN") {
-    if (store.loginWithGithub == false) {
+    if (store.loginWithTwitter == false) {
       const { data: foundData } = await supabase.from("realtime_user").select("*").match({
         email: session?.user?.email,
       })
@@ -152,6 +152,7 @@ supabase.auth.onAuthStateChange(async (ev, session) => {
             name: session?.user?.user_metadata.full_name ? session.user.user_metadata.full_name : undefined,
             image: session?.user?.user_metadata.avatar_url ? session.user.user_metadata.avatar_url : undefined,
             email: session?.user?.email,
+            twitter_account: session?.user?.user_metadata.user_name ? session.user.user_metadata.user_name : undefined,
           })
           .match({
             id: store.id,
@@ -162,9 +163,10 @@ supabase.auth.onAuthStateChange(async (ev, session) => {
           store.image = data[0].image
         }
       }
-      store.loginWithGithub = true
+      store.loginWithTwitter = true
       store.loginModal = false
     }
   }
+  store.handleBreak = false
 })
 </script>

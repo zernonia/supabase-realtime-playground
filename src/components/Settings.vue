@@ -50,22 +50,22 @@
           </form>
 
           <button
-            v-if="store.loginWithGithub == false"
+            v-if="store.loginWithTwitter == false"
             class="
-              mt-2
+              mt-4
               py-2
               text-sm
               font-semibold
               rounded-lg
-              bg-green-500
+              bg-blue-500
               flex
               items-center
               justify-center
-              focus:outline-none focus:ring focus:ring-green-400
+              focus:outline-none focus:ring focus:ring-blue-400
             "
             @click="login"
           >
-            <i-mdi:github class="mr-2"></i-mdi:github> Login with Github
+            <i-mdi:twitter class="mr-2"></i-mdi:twitter> Login with Twitter
           </button>
         </div>
       </transition>

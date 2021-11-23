@@ -16,5 +16,5 @@ export const store = reactive({
   color: useStorage("user_color", randomColor()),
   handleBreak: false,
   loginModal: useStorage("show_login_modal", true),
-  loginWithGithub: useStorage("login_with_github", false),
+  loginWithTwitter: useStorage("login_with_twitter", false),
 })

@@ -45,15 +45,15 @@
             w-64
             p-2
             rounded-lg
-            bg-green-500
+            bg-blue-500
             inline-flex
             items-center
             justify-center
-            focus:outline-none focus:ring focus:ring-green-400
+            focus:outline-none focus:ring focus:ring-blue-400
           "
-          @click="loginGithub"
+          @click="loginTwitter"
         >
-          <i-mdi:github class="mr-2"></i-mdi:github> Github
+          <i-mdi:twitter class="mr-2"></i-mdi:twitter> Twitter
         </button>
       </div>
     </div>
@@ -62,11 +62,20 @@
 
 <script setup lang="ts">
 import { store } from "@/store"
+import { onMounted, onUnmounted } from "vue"
 import { supabase } from "../supabase"
 
-const loginGithub = async () => {
+onMounted(() => {
+  store.handleBreak = true
+})
+
+onUnmounted(() => {
+  store.handleBreak = false
+})
+
+const loginTwitter = async () => {
   const { user, session, error } = await supabase.auth.signIn({
-    provider: "github",
+    provider: "twitter",
   })
   console.log(user, error)
 }
