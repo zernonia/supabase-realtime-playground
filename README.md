@@ -23,6 +23,12 @@
 
 ![Supabase Schema](images/main.png)
 
+## ⚠️ Archived
+This repo has been archive in favor of the new Multiplayer features that is coming soon on Supabase.
+Read more about it [here](https://supabase.com/blog/2022/04/01/supabase-realtime-with-multiplayer-features)
+
+***
+
 ## 🚀 Features
 
 - 🐤 Twitter Auth
